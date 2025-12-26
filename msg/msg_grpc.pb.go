@@ -36,6 +36,7 @@ const (
 	Msg_DeleteMsgs_FullMethodName                       = "/openim.msg.msg/DeleteMsgs"
 	Msg_DeleteMsgPhysicalBySeq_FullMethodName           = "/openim.msg.msg/DeleteMsgPhysicalBySeq"
 	Msg_DeleteMsgPhysical_FullMethodName                = "/openim.msg.msg/DeleteMsgPhysical"
+	Msg_DeleteUserMsgsByTime_FullMethodName             = "/openim.msg.msg/DeleteUserMsgsByTime"
 	Msg_SetSendMsgStatus_FullMethodName                 = "/openim.msg.msg/SetSendMsgStatus"
 	Msg_GetSendMsgStatus_FullMethodName                 = "/openim.msg.msg/GetSendMsgStatus"
 	Msg_RevokeMsg_FullMethodName                        = "/openim.msg.msg/RevokeMsg"
@@ -87,6 +88,8 @@ type MsgClient interface {
 	DeleteMsgPhysicalBySeq(ctx context.Context, in *DeleteMsgPhysicalBySeqReq, opts ...grpc.CallOption) (*DeleteMsgPhysicalBySeqResp, error)
 	// Physically delete messages by timestamp
 	DeleteMsgPhysical(ctx context.Context, in *DeleteMsgPhysicalReq, opts ...grpc.CallOption) (*DeleteMsgPhysicalResp, error)
+	// Delete messages for a specified user that were sent before a given timestamp.
+	DeleteUserMsgsByTime(ctx context.Context, in *DeleteUserMsgsByTimeReq, opts ...grpc.CallOption) (*DeleteUserMsgsByTimeResp, error)
 	// Set whether the API-sent message was delivered successfully
 	SetSendMsgStatus(ctx context.Context, in *SetSendMsgStatusReq, opts ...grpc.CallOption) (*SetSendMsgStatusResp, error)
 	// Get the message delivery status
@@ -271,6 +274,16 @@ func (c *msgClient) DeleteMsgPhysical(ctx context.Context, in *DeleteMsgPhysical
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(DeleteMsgPhysicalResp)
 	err := c.cc.Invoke(ctx, Msg_DeleteMsgPhysical_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) DeleteUserMsgsByTime(ctx context.Context, in *DeleteUserMsgsByTimeReq, opts ...grpc.CallOption) (*DeleteUserMsgsByTimeResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteUserMsgsByTimeResp)
+	err := c.cc.Invoke(ctx, Msg_DeleteUserMsgsByTime_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}

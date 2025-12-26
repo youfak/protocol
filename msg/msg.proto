@@ -317,6 +317,12 @@ message DestructMsgsResp {
   int32 count = 1;
 }
 
+message DeleteUserMsgsByTimeReq {
+  string userID = 1;
+  int32 day = 2;
+  DeleteSyncOpt deleteSyncOpt = 3;
+}
+
 message SetUserConversationsMinSeqReq {
   repeated string userIDs = 1;
   string conversationID = 2;
@@ -418,6 +424,8 @@ service msg {
   rpc DeleteMsgPhysicalBySeq(DeleteMsgPhysicalBySeqReq) returns (DeleteMsgPhysicalBySeqResp);
   // Physically delete messages by timestamp
   rpc DeleteMsgPhysical(DeleteMsgPhysicalReq) returns (DeleteMsgPhysicalResp);
+  // Delete messages for a specified user that were sent before a given timestamp.
+  rpc DeleteUserMsgsByTime(DeleteUserMsgsByTimeReq) returns (DeleteUserMsgsByTimeResp);
 
   // Set whether the API-sent message was delivered successfully
   rpc SetSendMsgStatus(SetSendMsgStatusReq) returns (SetSendMsgStatusResp);
