@@ -1,4 +1,4 @@
-@echo off
+ge  @echo off
 setlocal
 
 rem Define array elements
